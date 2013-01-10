@@ -14,7 +14,7 @@ namespace Fuzzy
 			position = this->AddInputLV("position", -1.0f, 1.0f);
 			params[0] = -2.0f; params[1] = -1.0f; params[2] = 0.0f;
 			position->AddTriMF("left", params);
-			params[0] = -0.1f; params[1] = 0.0f; params[2] = 0.1f;
+			params[0] = -0.5f; params[1] = 0.0f; params[2] = 0.5f;
 			position->AddTriMF("mid", params);
 			params[0] = 0.0f; params[1] = 1.0f; params[2] = 2.0f;
 			position->AddTriMF("right", params);
@@ -22,7 +22,7 @@ namespace Fuzzy
 			velocity = this->AddInputLV("velocity", -1.0f, 1.0f);
 			params[0] = -2.0f; params[1] = -1.0f; params[2] = 0.0f;
 			velocity->AddTriMF("left", params);
-			params[0] = -0.1f; params[1] = 0.0f; params[2] = 0.1f;
+			params[0] = -0.5f; params[1] = 0.0f; params[2] = 0.5f;
 			velocity->AddTriMF("slow", params);
 			params[0] = 0.0f; params[1] = 1.0f; params[2] = 2.0f;
 			velocity->AddTriMF("right", params);

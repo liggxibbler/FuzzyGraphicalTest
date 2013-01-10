@@ -96,7 +96,7 @@
       <Filter>AI\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FIS_Init.h">
-      <Filter>AI\Source Files</Filter>
+      <Filter>AI\Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

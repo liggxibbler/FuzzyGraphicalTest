@@ -6,6 +6,7 @@ BitmapShaderClass::BitmapShaderClass()
 	m_pixelShader = 0;
 	m_layout = 0;
 	m_matrixBuffer = 0;
+	m_timeBuffer = 0;
 	m_sampleState = 0;
 }
 
@@ -34,10 +35,10 @@ void BitmapShaderClass::Shutdown()
 }
 
 bool BitmapShaderClass::Render(ID3D11DeviceContext* devCon, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix,
-	ID3D11ShaderResourceView** texture)
+	ID3D11ShaderResourceView** texture, float time)
 {
 	bool result;
-	result = SetShaderParameters(devCon, worldMatrix, viewMatrix, projectionMatrix, texture);
+	result = SetShaderParameters(devCon, worldMatrix, viewMatrix, projectionMatrix, texture, time);
 	if(!result)
 	{
 		return false;
@@ -70,6 +71,11 @@ void BitmapShaderClass::ShutdownShader()
 		m_matrixBuffer->Release();
 		m_matrixBuffer = 0;
 	}
+	if(m_timeBuffer)
+	{
+		m_timeBuffer->Release();
+		m_timeBuffer = 0;
+	}
 	if(m_sampleState)
 	{
 		m_sampleState->Release();
@@ -86,7 +92,7 @@ bool BitmapShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR*
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
 	unsigned int numElements;
     D3D11_SAMPLER_DESC samplerDesc;
-	D3D11_BUFFER_DESC matrixBufferDesc;
+	D3D11_BUFFER_DESC matrixBufferDesc, timeBufferDesc;
 
 	// Initialize the pointers this function will use to null.
 	errorMessage = 0;
@@ -219,6 +225,20 @@ bool BitmapShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR*
 		return false;
 	}
 
+	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
+    timeBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	timeBufferDesc.ByteWidth = sizeof(MatrixBufferType);
+    timeBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    timeBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    timeBufferDesc.MiscFlags = 0;
+	timeBufferDesc.StructureByteStride = 0;
+
+	result = device->CreateBuffer(&timeBufferDesc, NULL, &m_timeBuffer);
+	if(FAILED(result))
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -269,12 +289,14 @@ void BitmapShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND 
 	return;
 }
 
-bool BitmapShaderClass::SetShaderParameters(ID3D11DeviceContext* devCon, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView** texture)
+bool BitmapShaderClass::SetShaderParameters(ID3D11DeviceContext* devCon, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+	D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView** texture, float time)
 {
 	HRESULT result;
     D3D11_MAPPED_SUBRESOURCE mappedResource;
 	unsigned int bufferNumber;
 	MatrixBufferType* dataPtr;
+	TimeBufferType* timePtr;
 
 	// Transpose the matrices to prepare them for the shader.
 	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
@@ -305,6 +327,28 @@ bool BitmapShaderClass::SetShaderParameters(ID3D11DeviceContext* devCon, D3DXMAT
 	// Now set the constant buffer in the vertex shader with the updated values.
     devCon->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
 
+	// Lock the constant buffer so it can be written to.
+	result = devCon->Map(m_timeBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if(FAILED(result))
+	{
+		return false;
+	}
+
+	// Get a pointer to the data in the constant buffer.
+	timePtr = (TimeBufferType*)mappedResource.pData;
+
+	// Copy the matrices into the constant buffer.
+	timePtr->time = time;
+	timePtr->padding = D3DXVECTOR3(0,0,0);
+
+	// Unlock the constant buffer.
+    devCon->Unmap(m_timeBuffer, 0);
+
+	// Set the position of the constant buffer in the vertex shader.
+	bufferNumber = 1;
+
+	// Now set the constant buffer in the vertex shader with the updated values.
+    devCon->VSSetConstantBuffers(bufferNumber, 1, &m_timeBuffer);
 	
 	// Set shader texture resource in the pixel shader.
 	devCon->PSSetShaderResources(0, 1, texture);

@@ -54,8 +54,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_fis = new Fuzzy::FIS_Init;
 	m_fis->Initialize();
 
-	m_input[0] = 0.5f;
-	m_input[1] = 0.5f;
+	m_input[0] = 0.0f;
+	m_input[1] = 5.0f;
 
 	
 	m_Road = new ModelClass;
@@ -63,7 +63,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	{
 		return false;
 	}
-	result = m_Road->Initialize(m_D3D->GetDevice(), "../data/bill.txt", L"../data/road.png", L"../data/road.png");	
+	result = m_Road->Initialize(m_D3D->GetDevice(), "../data/bill.txt", L"../data/road.png", NULL);	
 	if(!result)
 	{
 		return false;
@@ -74,7 +74,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	{
 		return false;
 	}
-	result = m_Car->Initialize(m_D3D->GetDevice(), "../data/bill.txt", L"../data/car.png", L"../data/car.png");	
+	result = m_Car->Initialize(m_D3D->GetDevice(), "../data/bill.txt", L"../data/car2.png", NULL);	
 	if(!result)
 	{
 		return false;
@@ -155,7 +155,7 @@ bool GraphicsClass::Frame(GraphicsClass::GraphicsUpdateInfo& guInf)
 
 	dt = guInf.time / 1000.0f;
 	
-	m_force = m_fis->Evaluate(m_input)[0] * 10;
+	m_force = m_fis->Evaluate(m_input)[0] * 20;
 	m_input[0] += m_input[1] * dt;
 	m_input[1] += m_force * dt;
 
@@ -203,7 +203,7 @@ bool GraphicsClass::Render(float time)
 	m_Road->Render(m_D3D->GetDeviceContext(), worldMatrix);
 
 	result = m_BitmapShader->Render(m_D3D->GetDeviceContext(), m_Road->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
-		m_Road->GetTexture());
+		m_Road->GetTexture(), time / 1000.0f);
 	if(!result)
 	{
 		return false;
@@ -213,13 +213,13 @@ bool GraphicsClass::Render(float time)
 	//D3DXMatrixMultiply(&worldMatrix, &temp, &worldMatrix);
 
 	m_D3D->GetWorldMatrix(worldMatrix);
-	D3DXMatrixTranslation(&temp, m_input[0] * 5, 0.0, 0.0);
+	D3DXMatrixTranslation(&temp, m_input[0] * 1, 0.0, 0.0);
 	D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &temp);
 
 	m_Car->Render(m_D3D->GetDeviceContext(), worldMatrix);
 
 	result = m_BitmapShader->Render(m_D3D->GetDeviceContext(), m_Car->GetIndexCount(), viewMatrix, worldMatrix, projectionMatrix, 
-		m_Car->GetTexture());
+		m_Car->GetTexture(), 0);
 	if(!result)
 	{
 		return false;

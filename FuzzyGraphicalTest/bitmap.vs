@@ -5,6 +5,12 @@ cbuffer MatrixBuffer
 	matrix projectionMatrix;
 }
 
+cbuffer TimeBuffer
+{
+	float time;
+	float3 padding;
+}
+
 struct VertexInput
 {
 	float4 position : POSITION;
@@ -26,7 +32,7 @@ PixelInput BitmapVertexShader(VertexInput input)
 	output.position = mul(input.position, worldMatrix);
 	output.position = mul(output.position, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);
-	output.tex = input.tex;
+	output.tex = input.tex + float2(0.0, -time);
 
 	return output;
 }
