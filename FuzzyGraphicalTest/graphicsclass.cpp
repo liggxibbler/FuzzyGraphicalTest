@@ -54,8 +54,11 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_fis = new Fuzzy::FIS_Init;
 	m_fis->Initialize();
 
-	m_input[0] = 0.0f;
-	m_input[1] = 5.0f;
+	m_setPoint[0] = 0.0;
+	m_setPoint[1] = 0.1;
+
+	m_input[0] = -1.0f;
+	m_input[1] = 0.0f;
 
 	
 	m_Road = new ModelClass;
@@ -148,14 +151,36 @@ bool GraphicsClass::Frame(GraphicsClass::GraphicsUpdateInfo& guInf)
 	bool result;
 	static float time = 0.0f;
 	static float dt;
+	static float input[2];
 
 	time += guInf.time;
 
-	m_Camera->Frame(guInf.mouseDiffX, guInf.mouseDiffY, guInf.wKey, guInf.aKey, guInf.sKey, guInf.dKey);
+	//m_Camera->Frame(guInf.mouseDiffX, guInf.mouseDiffY, guInf.wKey, guInf.aKey, guInf.sKey, guInf.dKey);
 
 	dt = guInf.time / 1000.0f;
+
+	if(guInf.dKey)
+	{
+		m_setPoint[0] += m_setPoint[1] * dt;
+	}
+	if(guInf.aKey)
+	{
+		m_setPoint[0] -= m_setPoint[1] * dt;
+	}
+	if(guInf.wKey)
+	{
+		m_setPoint[1] += .01;
+	}
+	if(guInf.sKey)
+	{
+		m_setPoint[1] -= .01;
+	}
+
+	input[0] = m_input[0] - m_setPoint[0];
+	input[1] = m_input[1];
+
+	m_force = m_fis->Evaluate(input)[0] * 3;
 	
-	m_force = m_fis->Evaluate(m_input)[0] * 20;
 	m_input[0] += m_input[1] * dt;
 	m_input[1] += m_force * dt;
 
@@ -197,6 +222,8 @@ bool GraphicsClass::Render(float time)
 	//D3DXMatrixRotationY(&worldMatrix, time / 1000);
 	//D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &temp);
 	D3DXMatrixScaling(&worldMatrix, 2, 5, 0.0);
+	D3DXMatrixTranslation(&temp, m_setPoint[0] * .5, 0.0, 0.0);
+	D3DXMatrixMultiply(&worldMatrix, &temp, &worldMatrix);
 
 	m_D3D->TurnAlphaBlendingOn();
 
@@ -212,9 +239,7 @@ bool GraphicsClass::Render(float time)
 	
 	//D3DXMatrixMultiply(&worldMatrix, &temp, &worldMatrix);
 
-	m_D3D->GetWorldMatrix(worldMatrix);
-	D3DXMatrixTranslation(&temp, m_input[0] * 1, 0.0, 0.0);
-	D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &temp);
+	D3DXMatrixTranslation(&worldMatrix, m_input[0] * 1, 0.0, 0.0);
 
 	m_Car->Render(m_D3D->GetDeviceContext(), worldMatrix);
 

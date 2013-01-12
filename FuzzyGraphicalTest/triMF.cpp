@@ -48,25 +48,25 @@ float TriMF::Evaluate(float input)
 	{
 		return Evaluate(m_minRange + epsilon);
 	}
-	if(input >= m_minRange && input < m_left)
+	else if(input >= m_minRange && input < m_left)
 	{
 		return 0;
 	}
-	if(input >= m_left && input < m_mid)
+	else if(input >= m_left && input < m_mid)
 	{
 		m = 1 / (m_mid - m_left); // slope of left side line segment
 		return m * (input - m_left); // line equation
 	}
-	if(input >= m_mid && input < m_right)
+	else if(input >= m_mid && input < m_right)
 	{
 		m = (-1) / (m_right - m_mid); // slope of right side line segment
 		return 1 + m * (input - m_mid); // line equation
 	}
-	if(input >= m_right && input < m_maxRange)
+	else if(input >= m_right && input < m_maxRange)
 	{
 		return 0;
 	}
-	if(input > m_minRange)
+	else if(input > m_maxRange)
 	{
 		return Evaluate(m_maxRange - epsilon);
 	}

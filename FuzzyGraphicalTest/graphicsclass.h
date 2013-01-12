@@ -57,6 +57,7 @@ private:
 	
 	BitmapShaderClass* m_BitmapShader;
 	float m_input[2];
+	float m_setPoint[2];
 	float m_force;
 	Fuzzy::FIS_Init* m_fis;
 };
