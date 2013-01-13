@@ -79,27 +79,36 @@ void TriMF::CalculateCentroid()
 	// Returns the centroid of the triangular MF
 	// 
 
-	float l3, m3, r3; // store the cubes
-	float d1, d2; // store denominators
-	//float n,d;
-	float n1, n2; // store numerators
-	float result;
+	//float l3, m3, r3; // store the cubes
+	//float d1, d2; // store denominators
+	////float n,d;
+	//float n1, n2; // store numerators
+	//float result;
 
-	l3 = m_left * m_left * m_left;
-	m3 = m_mid * m_mid * m_mid;
-	r3 = m_right * m_right * m_right;
+	//l3 = m_left * m_left * m_left;
+	//m3 = m_mid * m_mid * m_mid;
+	//r3 = m_right * m_right * m_right;
 
-	d1 = 6 * (m_mid - m_left);
-	d2 = 6 * (m_mid - m_right);
+	//d1 = 6 * (m_mid - m_left);
+	//d2 = 6 * (m_mid - m_right);
 
-	n1 = 2*m3 - 3*m_left*m_mid*m_mid + l3;
-	n2 = -r3 + 3*m_right*m_mid*m_mid - 2*m3;
-	
-	//d = 6 * (m_mid - m_left) * (m_mid - m_right);
-	//n = m_right*m3 - m_left*m3 + m_mid*l3 - m_right*l3 - m_mid*r3;
+	//n1 = 2*m3 - 3*m_left*m_mid*m_mid + l3;
+	//n2 = -r3 + 3*m_right*m_mid*m_mid - 2*m3;
+	//
+	////d = 6 * (m_mid - m_left) * (m_mid - m_right);
+	////n = m_right*m3 - m_left*m3 + m_mid*l3 - m_right*l3 - m_mid*r3;
 
-	result = 2 * (n1/d1 + n2/d2) / (m_right - m_left);
-	//result = n / d;
+	//result = 2 * (n1/d1 + n2/d2) / (m_right - m_left);
+	////result = n / d;
+
+	float result, l, m, r;
+
+	l = m_left;
+	r = m_right;
+	m = m_mid;
+
+	result = -((l - m)*(2*l*l*m - 2*r*l*l - l*m*m + r*l*m + 4*l - m*m*m + r*m*m + 5*m))/6;
+	result /= (r-l)/2;
 
 	m_centroid = result;
 }

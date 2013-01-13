@@ -152,6 +152,8 @@ bool GraphicsClass::Frame(GraphicsClass::GraphicsUpdateInfo& guInf)
 	static float time = 0.0f;
 	static float dt;
 	static float input[2];
+	static float k = 100; //  Convert force to accelleration
+						 // the greater K is, the smaller the mass of the car is assumed
 
 	time += guInf.time;
 
@@ -179,7 +181,7 @@ bool GraphicsClass::Frame(GraphicsClass::GraphicsUpdateInfo& guInf)
 	input[0] = m_input[0] - m_setPoint[0];
 	input[1] = m_input[1];
 
-	m_force = m_fis->Evaluate(input)[0] * 3;
+	m_force = m_fis->Evaluate(input)[0] * k;
 	
 	m_input[0] += m_input[1] * dt;
 	m_input[1] += m_force * dt;

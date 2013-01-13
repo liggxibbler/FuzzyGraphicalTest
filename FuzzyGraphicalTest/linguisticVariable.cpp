@@ -73,17 +73,17 @@ float LinguisticVariable::Centroid(int numPoints)
 	}
 
 	std::list<MembershipFunction*>::iterator iter;
-	for(iter = m_mf.begin(); iter !=m_mf.end(); iter++)
+	for(iter = m_mf.begin(); iter !=m_mf.end(); iter++) // for every membership function of the LV
 	{
 		mf = *iter;
-		weight = mf->GetBuffer()->Read();
+		weight = mf->GetBuffer()->Read(); // the weight of that MF
 
 		for(i=0; i<numPoints; i++)
 		{
 			value = mf->Peek(m_minRange + dx * i);
 			if(value * weight > integrant[i])
 			{
-				integrant[i] = value * weight;
+				integrant[i] = value * weight; // is added to the function to be integrated
 			}
 		}
 	}
@@ -92,10 +92,12 @@ float LinguisticVariable::Centroid(int numPoints)
 	denominator = IntegrateTrapezoidal(integrant, numPoints, dx);
 
 	for(int i=0; i<numPoints; i++)
+		// change function from m(x) to x*m(x)
 	{
 		integrant[i] = (m_minRange + i*dx)*integrant[i];
 	}
 
+	// integrate x*m(x)
 	numerator = IntegrateTrapezoidal(integrant, numPoints, dx);
 
 	result = numerator/denominator;

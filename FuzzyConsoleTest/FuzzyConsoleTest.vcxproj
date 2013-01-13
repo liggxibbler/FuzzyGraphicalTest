@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4683D7AD-E141-476E-9842-CDFFA33A41DD}</ProjectGuid>
+    <ProjectGuid>{01EF153B-359B-49A0-829B-78654045B410}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>FuzzyGraphicalTest</RootNamespace>
+    <RootNamespace>FuzzyConsoleTest</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -39,14 +39,10 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)\include\;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
-    <ReferencePath>$(VCInstallDir)atlmfc\lib;$(VCInstallDir)lib</ReferencePath>
-    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+    <IncludePath>..\FuzzyGraphicalTest\;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -54,10 +50,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -69,64 +65,37 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="bitmap.ps" />
-    <None Include="bitmap.vs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="bitmapshaderclass.cpp" />
-    <ClCompile Include="buffer.cpp" />
-    <ClCompile Include="cameraclass.cpp" />
-    <ClCompile Include="cpuclass.cpp" />
-    <ClCompile Include="d3dclass.cpp" />
-    <ClCompile Include="fpsclass.cpp" />
-    <ClCompile Include="graphicsclass.cpp" />
-    <ClCompile Include="inferenceSystem.cpp" />
-    <ClCompile Include="FIS_Init.h" />
-    <ClCompile Include="inputclass.cpp" />
-    <ClCompile Include="linguisticVariable.cpp" />
+    <ClCompile Include="..\FuzzyGraphicalTest\buffer.cpp" />
+    <ClCompile Include="..\FuzzyGraphicalTest\inferenceSystem.cpp" />
+    <ClCompile Include="..\FuzzyGraphicalTest\linguisticVariable.cpp" />
+    <ClCompile Include="..\FuzzyGraphicalTest\membershipFunction.cpp" />
+    <ClCompile Include="..\FuzzyGraphicalTest\rule.cpp" />
+    <ClCompile Include="..\FuzzyGraphicalTest\ruleBase.cpp" />
+    <ClCompile Include="..\FuzzyGraphicalTest\TrapMF.cpp" />
+    <ClCompile Include="..\FuzzyGraphicalTest\triMF.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="membershipFunction.cpp" />
-    <ClCompile Include="modelclass.cpp" />
-    <ClCompile Include="rule.cpp" />
-    <ClCompile Include="ruleBase.cpp" />
-    <ClCompile Include="systemclass.cpp" />
-    <ClCompile Include="textureclass.cpp" />
-    <ClCompile Include="timerclass.cpp" />
-    <ClCompile Include="TrapMF.cpp" />
-    <ClCompile Include="triMF.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bitmapShaderClass.h" />
-    <ClInclude Include="buffer.h" />
-    <ClInclude Include="cameraclass.h" />
-    <ClInclude Include="cpuclass.h" />
-    <ClInclude Include="d3dclass.h" />
-    <ClInclude Include="fpsclass.h" />
-    <ClInclude Include="graphicsclass.h" />
-    <ClInclude Include="inferenceSystem.h" />
-    <ClInclude Include="inputclass.h" />
-    <ClInclude Include="linguisticVariable.h" />
-    <ClInclude Include="membershipFunction.h" />
-    <ClInclude Include="modelclass.h" />
-    <ClInclude Include="pairDescriptor.h" />
-    <ClInclude Include="rule.h" />
-    <ClInclude Include="ruleBase.h" />
-    <ClInclude Include="ruleDescriptor.h" />
-    <ClInclude Include="systemclass.h" />
-    <ClInclude Include="textureclass.h" />
-    <ClInclude Include="timerclass.h" />
-    <ClInclude Include="TrapMF.h" />
-    <ClInclude Include="triMF.h" />
+    <ClInclude Include="..\FuzzyGraphicalTest\buffer.h" />
+    <ClInclude Include="..\FuzzyGraphicalTest\inferenceSystem.h" />
+    <ClInclude Include="..\FuzzyGraphicalTest\linguisticVariable.h" />
+    <ClInclude Include="..\FuzzyGraphicalTest\membershipFunction.h" />
+    <ClInclude Include="..\FuzzyGraphicalTest\pairDescriptor.h" />
+    <ClInclude Include="..\FuzzyGraphicalTest\rule.h" />
+    <ClInclude Include="..\FuzzyGraphicalTest\ruleBase.h" />
+    <ClInclude Include="..\FuzzyGraphicalTest\ruleDescriptor.h" />
+    <ClInclude Include="..\FuzzyGraphicalTest\TrapMF.h" />
+    <ClInclude Include="..\FuzzyGraphicalTest\triMF.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -42,7 +42,8 @@ bool Rule::Fire()
 			return false;
 		}
 		val = m_input[i]->Read();
-		result = val < result ? val : result; // fuzzy AND the outputs
+		//result = val < result ? val : result; // fuzzy AND the outputs
+		result = val * result; // fuzzy AND the outputs
 	}
 
 	for(int i=0; i<m_outputCount; i++)
